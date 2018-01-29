@@ -6,6 +6,8 @@ import bluetooth
 import sys
 import subprocess
 
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
 # --------- User Settings ---------
 WEIGHT_SAMPLES = 500
 # ---------------------------------
@@ -26,6 +28,12 @@ BOTTOM_RIGHT = 1
 TOP_LEFT = 2
 BOTTOM_LEFT = 3
 BLUETOOTH_NAME = "Nintendo RVL-WBC-01"
+CA_PATH = "root-CA.crt"
+PRIVATE_PATH = "beerfridge1.private.key"
+CERT_PATH = "beerfridge1.cert.pem"
+CLIENT_ID = "BeerFridgeClient1"
+END_POINT = " ENDPOINT"
+TOPIC = " beerfridge1"
 
 
 class EventProcessor:
@@ -34,6 +42,22 @@ class EventProcessor:
         self.done = False
         self._measureCnt = 0
         self._events = range(WEIGHT_SAMPLES)
+        self.bottles = 0
+        self._bottlesPrev = -1
+        self.setIOT()
+
+    def setIOT(self):
+        self.myMQTTClient = AWSIoTMQTTClient(CLIENT_ID)
+        self.myMQTTClient.configureEndpoint(END_POINT, 8883)
+        # For Websocket
+        # myMQTTClient.configureEndpoint("YOUR.ENDPOINT", 443)
+        self.myMQTTClient.configureCredentials(CA_PATH, PRIVATE_PATH, CERT_PATH)
+        # For Websocket, we only need to configure the root CA
+        # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH")
+        self.myMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+        self.myMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+        self.myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+        self.myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
     def mass(self, event):
         if (event.totalWeight > 2):
@@ -51,8 +75,11 @@ class EventProcessor:
             sendBeerChange()
 
 
-    def sendBeerChange():
-        print "Beer Change: "
+    def sendBeerChange(self):
+        print "Beer Change"
+        self.myMQTTClient.connect()
+        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + self._weight + "}", 0)
+        self.myMQTTClient.disconnect()
 
     @property
     def weight(self):
@@ -79,7 +106,6 @@ class Wiiboard:
         # Sockets and status
         self.receivesocket = None
         self.controlsocket = None
-
         self.processor = processor
         self.calibration = []
         self.calibrationRequested = False
