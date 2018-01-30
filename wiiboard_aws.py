@@ -72,13 +72,13 @@ class EventProcessor:
                 print str(self._weight) + " lbs"
             if not self._measured:
                 self._measured = True
-            self.sendBeerChange()
+            self.sendBeerChange(self._weight)
 
 
-    def sendBeerChange(self):
+    def sendBeerChange(self, weight):
         print "Beer Change"
         self.myMQTTClient.connect()
-        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + self._weight + "}", 0)
+        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + str(weight)+ "}", 0)
         self.myMQTTClient.disconnect()
 
     @property
