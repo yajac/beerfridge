@@ -33,7 +33,7 @@ PRIVATE_PATH = "beerfridge1.private.key"
 CERT_PATH = "beerfridge1.cert.pem"
 CLIENT_ID = "BeerFridgeClient1"
 END_POINT = " ENDPOINT"
-TOPIC = " beerfridge1"
+TOPIC = " thing/beerfridge1"
 
 
 class EventProcessor:
