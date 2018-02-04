@@ -32,8 +32,8 @@ CA_PATH = "root-CA.crt"
 PRIVATE_PATH = "beerfridge1.private.key"
 CERT_PATH = "beerfridge1.cert.pem"
 CLIENT_ID = "BeerFridgeClient1"
-END_POINT = " ENDPOINT"
-TOPIC = " thing/beerfridge1"
+END_POINT = "awsdomain"
+TOPIC = " beerfridge1"
 
 
 class EventProcessor:
