@@ -9,7 +9,7 @@ import subprocess
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # --------- User Settings ---------
-WEIGHT_SAMPLES = 500
+WEIGHT_SAMPLES = 100
 # ---------------------------------
 
 # Wiiboard Parameters
@@ -43,6 +43,7 @@ class EventProcessor:
         self._measureCnt = 0
         self._events = range(WEIGHT_SAMPLES)
         self.bottles = 0
+        self.weightprevious = 0
         self._bottlesPrev = -1
         self.setIOT()
 
@@ -60,8 +61,8 @@ class EventProcessor:
         self.myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
     def mass(self, event):
-        if (event.totalWeight > 2):
-            self._events[self._measureCnt] = event.totalWeight*2.20462
+        if (event.totalWeight > 1):
+            self._events[self._measureCnt] = event.totalWeight * 2.20462
             self._measureCnt += 1
             if self._measureCnt == WEIGHT_SAMPLES:
                 self._sum = 0
@@ -70,15 +71,18 @@ class EventProcessor:
                 self._weight = self._sum/WEIGHT_SAMPLES
                 self._measureCnt = 0
                 print str(self._weight) + " lbs"
-                self.sendBeerChange(self._weight)
+                if (self.weightprevious != 0)
+                    self.sendBeerChange(self._weight, self.weightprevious < self.weight)
+                else:
+                    self.weightprevious = self._weight
             if not self._measured:
                 self._measured = True
 
 
-    def sendBeerChange(self, weight):
+    def sendBeerChange(self, weight, up):
         print "Beer Change"
         self.myMQTTClient.connect()
-        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + str(weight)+ "}", 0)
+        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + str(weight)+ ",\"addBeer\":" + up + "}", 0)
         self.myMQTTClient.disconnect()
 
     @property
