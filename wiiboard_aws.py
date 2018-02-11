@@ -34,7 +34,7 @@ CERT_PATH = "beerfridge1.cert.pem"
 CLIENT_ID = "BeerFridgeClient1"
 END_POINT = "awsdomain"
 TOPIC = "beerfridge1"
-BEER_WEIGHT = .5
+BEER_WEIGHT = .3
 
 
 class EventProcessor:
