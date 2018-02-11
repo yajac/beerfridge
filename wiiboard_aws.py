@@ -70,8 +70,9 @@ class EventProcessor:
                     self._sum += self._events[x]
                 self._weight = self._sum/WEIGHT_SAMPLES
                 self._measureCnt = 0
-                print str(self._weight) + " lbs"
-                if abs(self.weightprevious - self._weight) > 1 :
+
+                if abs(self.weightprevious - self._weight) > 1 and self.weightprevious > 0:
+                    print str(self._weight) + " lbs"
                     self.sendBeerChange(self._weight, self.weightprevious)
                 self.weightprevious = self._weight
             if not self._measured:
