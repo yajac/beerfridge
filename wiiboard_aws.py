@@ -33,7 +33,7 @@ PRIVATE_PATH = "beerfridge1.private.key"
 CERT_PATH = "beerfridge1.cert.pem"
 CLIENT_ID = "BeerFridgeClient1"
 END_POINT = "awsdomain"
-TOPIC = " beerfridge1"
+TOPIC = "beerfridge1"
 
 
 class EventProcessor:
@@ -71,18 +71,17 @@ class EventProcessor:
                 self._weight = self._sum/WEIGHT_SAMPLES
                 self._measureCnt = 0
                 print str(self._weight) + " lbs"
-                if (self.weightprevious != 0)
-                    self.sendBeerChange(self._weight, self.weightprevious < self.weight)
-                else:
-                    self.weightprevious = self._weight
+                self.sendBeerChange(self._weight, self.weightprevious)
+                self.weightprevious = self._weight
             if not self._measured:
                 self._measured = True
 
 
-    def sendBeerChange(self, weight, up):
-        print "Beer Change"
+    def sendBeerChange(self, weight, weightprevious):
+        self._message = "{\"weight\":" + str(weight)+ ",\"weightprevious\":" + str(weightprevious) + "}"
+        print "Beer Change" + str(self._message)
         self.myMQTTClient.connect()
-        self.myMQTTClient.publish(TOPIC, "{\"weight\":" + str(weight)+ ",\"addBeer\":" + up + "}", 0)
+        self.myMQTTClient.publish(TOPIC, self._message, 0)
         self.myMQTTClient.disconnect()
 
     @property
