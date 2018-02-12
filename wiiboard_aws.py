@@ -9,7 +9,7 @@ import subprocess
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # --------- User Settings ---------
-WEIGHT_SAMPLES = 200
+WEIGHT_SAMPLES = 500
 # ---------------------------------
 
 # Wiiboard Parameters
