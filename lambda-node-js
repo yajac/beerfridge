@@ -2,7 +2,7 @@ console.log('Loading function');
 
 const https = require('https');
 const url = require('url');
-const slack_url = 'https://hooks.slack.com/services/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';
+const slack_url = 'hook';
 const slack_req_opts = url.parse(slack_url);
 slack_req_opts.method = 'POST';
 slack_req_opts.headers = {
@@ -21,13 +21,18 @@ function writeBeer(weight, previousweight){
     var text = "Beer Error";
     var emoji = ":beers:"
     if(weight < previousweight){
-        text = "It's BEER time. Come have a beer! ";
+        text = "It's BEER time. Join and have a beer! ";
+        if(weight < 60){
+            text += "Beer Fridge is getting low on good beer.";
+        } else if(weight < 53){
+            text += "Beer Fridge is almost empty!!!";
+        }
     }else if(weight > previousweight){
-         text = "Beer has been stocked. Yay!";
+        text = "Beer has been stocked. Thank you Armin.";
     }
 
     var params = {
-        "channel": "#beertest",
+        "channel": "#goodbeerfridge",
         "username": "Beer Fridge",
         "text": text,
         "icon_emoji": emoji
