@@ -9,6 +9,7 @@ import subprocess
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # --------- User Settings ---------
+# More is slower but more accurate
 WEIGHT_SAMPLES = 500
 # ---------------------------------
 
@@ -28,13 +29,16 @@ BOTTOM_RIGHT = 1
 TOP_LEFT = 2
 BOTTOM_LEFT = 3
 BLUETOOTH_NAME = "Nintendo RVL-WBC-01"
+# Aws parameters
 CA_PATH = "root-CA.crt"
 PRIVATE_PATH = "beerfridge1.private.key"
 CERT_PATH = "beerfridge1.cert.pem"
 CLIENT_ID = "BeerFridgeClient1"
 END_POINT = "awsdomain"
 TOPIC = "beerfridge1"
+# Fridge parameters
 BEER_WEIGHT = .3
+# Empty fridge weight 51
 
 
 class EventProcessor:
