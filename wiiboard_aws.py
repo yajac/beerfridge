@@ -10,7 +10,7 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # --------- User Settings ---------
 # More is slower but more accurate
-WEIGHT_SAMPLES = 500
+WEIGHT_SAMPLES = 1000
 # ---------------------------------
 
 # Wiiboard Parameters
@@ -37,7 +37,7 @@ CLIENT_ID = "BeerFridgeClient1"
 END_POINT = "awsdomain"
 TOPIC = "beerfridge1"
 # Fridge parameters
-BEER_WEIGHT = .3
+BEER_WEIGHT = .8
 # Empty fridge weight 51
 
 
