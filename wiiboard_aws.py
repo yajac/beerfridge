@@ -10,7 +10,7 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # --------- User Settings ---------
 # More is slower but more accurate
-WEIGHT_SAMPLES = 1000
+WEIGHT_SAMPLES = 2000
 # ---------------------------------
 
 # Wiiboard Parameters
