@@ -5,8 +5,14 @@ import time
 import bluetooth
 import sys
 import subprocess
+import os
+import glob
+import time
 
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
 
 # --------- User Settings ---------
 # More is slower but more accurate
