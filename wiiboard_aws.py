@@ -40,6 +40,27 @@ TOPIC = "beerfridge1"
 BEER_WEIGHT = .8
 # Empty fridge weight 51
 
+BASE_DIR = '/sys/bus/w1/devices/'
+DEVICE_FOLDER = glob.glob(BASE_DIR + '28*')[0]
+DEVICE_FILE = DEVICE_FOLDER + '/w1_slave'
+
+
+def readTempRaw():
+    f = open(DEVICE_FILE, 'r')
+    lines = f.readlines()
+    f.close()
+    return lines
+
+def readTemp():
+    lines = readTempRaw()
+    while lines[0].strip()[-3:] != 'YES':
+        time.sleep(0.2)
+        lines = readTempRaw()
+    equalsPos = lines[1].find('t=')
+    if equalsPos != -1:
+        tempString = lines[1][equalsPos+2:]
+        tempC = float(tempString) / 1000.0
+        return tempC
 
 class EventProcessor:
     def __init__(self):
@@ -49,6 +70,7 @@ class EventProcessor:
         self._events = range(WEIGHT_SAMPLES)
         self.bottles = 0
         self.weightprevious = 0
+        self.tempprevious = 0
         self._bottlesPrev = -1
         self.setIOT()
 
@@ -75,17 +97,19 @@ class EventProcessor:
                     self._sum += self._events[x]
                 self._weight = self._sum/WEIGHT_SAMPLES
                 self._measureCnt = 0
-
+                self.temp = tempprevious
                 if abs(self.weightprevious - self._weight) > BEER_WEIGHT and self.weightprevious > 0:
                     print str(self._weight) + " lbs"
-                    self.sendBeerChange(self._weight, self.weightprevious)
+                    self.temp = readTemp()
+                    self.sendBeerChange(self._weight, self.weightprevious, self.temp, self.tempprevious)
                 self.weightprevious = self._weight
+                self.tempprevious = self.temp
             if not self._measured:
                 self._measured = True
 
 
-    def sendBeerChange(self, weight, weightprevious):
-        self._message = "{\"weight\":" + str(weight)+ ",\"weightprevious\":" + str(weightprevious) + "}"
+    def sendBeerChange(self, weight, weightprevious, tempprevious, temp):
+        self._message = "{\"weight\":" + str(weight)+ ",\"weightprevious\":" + str(weightprevious) + ",\"temp\":" + str(temp) + ",\"tempprevious\":" + str(tempprevious)+ "}"
         print "Beer Change" + str(self._message)
         self.myMQTTClient.connect()
         self.myMQTTClient.publish(TOPIC, self._message, 0)
