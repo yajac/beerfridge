@@ -16,7 +16,7 @@ os.system('modprobe w1-therm')
 
 # --------- User Settings ---------
 # More is slower but more accurate
-WEIGHT_SAMPLES = 2000
+WEIGHT_SAMPLES = 1000
 # ---------------------------------
 
 # Wiiboard Parameters
@@ -103,7 +103,7 @@ class EventProcessor:
                     self._sum += self._events[x]
                 self._weight = self._sum/WEIGHT_SAMPLES
                 self._measureCnt = 0
-                self.temp = tempprevious
+                self.temp = self.tempprevious
                 if abs(self.weightprevious - self._weight) > BEER_WEIGHT and self.weightprevious > 0:
                     print str(self._weight) + " lbs"
                     self.temp = readTemp()
