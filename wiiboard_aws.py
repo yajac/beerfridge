@@ -43,7 +43,7 @@ CLIENT_ID = "BeerFridgeClient1"
 END_POINT = "awsdomain"
 TOPIC = "beerfridge1"
 # Fridge parameters
-BEER_WEIGHT = .8
+BEER_WEIGHT = .1
 # Empty fridge weight 51
 
 BASE_DIR = '/sys/bus/w1/devices/'
