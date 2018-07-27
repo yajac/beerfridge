@@ -114,7 +114,7 @@ class EventProcessor:
                 self._measured = True
 
 
-    def sendBeerChange(self, weight, weightprevious, tempprevious, temp):
+    def sendBeerChange(self, weight, weightprevious, temp, tempprevious):
         self._message = "{\"weight\":" + str(weight)+ ",\"weightprevious\":" + str(weightprevious) + ",\"temp\":" + str(temp) + ",\"tempprevious\":" + str(tempprevious)+ "}"
         print "Beer Change" + str(self._message)
         self.myMQTTClient.connect()
