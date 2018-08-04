@@ -16,7 +16,7 @@ os.system('modprobe w1-therm')
 
 # --------- User Settings ---------
 # More is slower but more accurate
-WEIGHT_SAMPLES = 1000
+WEIGHT_SAMPLES = 500
 # ---------------------------------
 
 # Wiiboard Parameters
